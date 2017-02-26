@@ -2,40 +2,16 @@
 # and its dependencies with the aid of the Mix.Config module.
 use Mix.Config
 
+config :pagerduty_wakeup_call,
+  email: System.get_env("EMAIL_ADDR")
+
 config :gmail, :oauth2,
   client_id: System.get_env("CLIENT_ID"),
-  client_secret: System.get_env("CLIENT_SECRET")
+  client_secret: System.get_env("CLIENT_SECRET"),
+  refresh_token: System.get_env("REFRESH_TOKEN")
 
 config :gmail, :thread,
   pool_size: 20
 
 config :gmail, :message,
   pool_size: 20
-
-
-# This configuration is loaded before any dependency and is restricted
-# to this project. If another project depends on this project, this
-# file won't be loaded nor affect the parent project. For this reason,
-# if you want to provide default values for your application for
-# 3rd-party users, it should be done in your "mix.exs" file.
-
-# You can configure for your application as:
-#
-#     config :pagerduty_wakeup_call, key: :value
-#
-# And access this configuration in your application as:
-#
-#     Application.get_env(:pagerduty_wakeup_call, :key)
-#
-# Or configure a 3rd-party app:
-#
-#     config :logger, level: :info
-#
-
-# It is also possible to import configuration files, relative to this
-# directory. For example, you can emulate configuration per environment
-# by uncommenting the line below and defining dev.exs, test.exs and such.
-# Configuration from the imported file will override the ones defined
-# here (which is why it is important to import them last).
-#
-#     import_config "#{Mix.env}.exs"
