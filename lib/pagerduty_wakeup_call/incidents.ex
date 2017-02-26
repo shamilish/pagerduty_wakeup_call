@@ -2,6 +2,8 @@ defmodule PagerdutyWakeupCall.Incidents do
   use GenServer
   import Logger
 
+  @incident_subject "[PagerDuty ALERT]"
+
   defstruct [:email, :refresh_interval, :incidents, :last_update]
 
   def start_link do
@@ -57,14 +59,25 @@ defmodule PagerdutyWakeupCall.Incidents do
     {:ok, emails} = Gmail.User.messages(email)
     ids = Enum.map(emails, &Map.get(&1, :id))
 
-    incidents = Enum.map(ids, fn id ->
-                  case Gmail.User.message(email, id) do
-                    {:ok,  %{payload: %{headers: headers}}} -> Enum.find(headers, fn h -> h.name == "Subject" end) |> Map.get(:value)
-                    {:error, err_msg} -> raise "#{__MODULE__} Error fetching incidents - #{inspect err_msg}"
-                  end
-                end)
+    incidents = ids |> extract_subjects(email) |> filter_incidents
+
     Logger.info("#{__MODULE__} Incident count #{length incidents}")
     incidents
+  end
+
+  defp extract_subjects(email_ids, email) do
+    email_ids |>
+    Enum.map(fn id ->
+      case Gmail.User.message(email, id) do
+        {:ok,  %{payload: %{headers: headers}}} -> Enum.find(headers, fn h -> h.name == "Subject" end) |> Map.get(:value)
+        {:error, err_msg} -> raise "#{__MODULE__} Error fetching incidents - #{inspect err_msg}"
+      end
+    end)
+  end
+
+  def filter_incidents(email_subjects) do
+    email_subjects |>
+    Enum.filter(&String.contains?(&1, @incident_subject))
   end
 
   defp refresh_token do
