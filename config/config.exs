@@ -16,7 +16,7 @@ config :gmail, :oauth2,
   refresh_token: System.get_env("REFRESH_TOKEN")
 
 config :gmail, :thread,
-  pool_size: 10
+  pool_size: 5
 
 config :gmail, :message,
   pool_size: 10

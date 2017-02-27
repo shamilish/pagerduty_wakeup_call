@@ -11,7 +11,7 @@ defmodule PagerdutyWakeupCall.Incidents do
   end
 
   def init([]) do
-    Logger.info "#{__MODULE__} init"
+    Logger.debug "#{__MODULE__} init"
     email = Application.get_env(:pagerduty_wakeup_call, :email)
     refresh_interval = Application.get_env(:pagerduty_wakeup_call, :refresh_interval)
     incidents = fetch_incidents(email)
@@ -54,7 +54,7 @@ defmodule PagerdutyWakeupCall.Incidents do
   end
 
   defp fetch_incidents(email) do
-    Logger.info "#{__MODULE__} fetching incidents"
+    Logger.debug "#{__MODULE__} fetching incidents"
 
     {:ok, emails} = Gmail.User.messages(email)
     ids = Enum.map(emails, &Map.get(&1, :id))
