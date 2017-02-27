@@ -7,7 +7,8 @@ config :logger,
 
 config :pagerduty_wakeup_call,
   email: System.get_env("EMAIL_ADDR"),
-  refresh_interval: 5
+  refresh_interval: 5,
+  api_port: 4000
 
 config :gmail, :oauth2,
   client_id: System.get_env("CLIENT_ID"),
