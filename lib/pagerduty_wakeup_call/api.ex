@@ -3,6 +3,7 @@ defmodule PagerdutyWakeupCall.Api do
   use Plug.Router
 
   plug :match
+  plug CORSPlug
   plug :dispatch
 
   get "/" do

@@ -1,1 +1,11 @@
-<h1> PagerDuty Wakeup Call</h1>
+<h3> PagerDuty Wakeup Call</h3>
+<p> Status: {{#if triggered}} wake up {{else}} sleep {{/if}}</p>
+
+<div>
+  <strong> Incidents </strong>
+  <li>
+    {{#each incidents as |incident|}}
+    <ul> incident </ul>
+    {{/each}}
+  </li>
+</div>

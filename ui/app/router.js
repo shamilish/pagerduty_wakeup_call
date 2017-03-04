@@ -7,7 +7,7 @@ const Router = Ember.Router.extend({
 });
 
 Router.map(function() {
-  this.route("wake-up-call", { path: '/'})
+  this.route("wake-up-call", { path: '/'});
 });
 
 export default Router;
