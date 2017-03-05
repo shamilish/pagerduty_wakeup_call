@@ -15,6 +15,6 @@ defmodule PagerdutyWakeupCall.Supervisor do
       Plug.Adapters.Cowboy.child_spec(:http, Api, [], [port: api_port])
     ]
 
-    supervise(children, strategy: :one_for_all)
+    supervise(children, strategy: :one_for_all, max_restarts: 50)
   end
 end

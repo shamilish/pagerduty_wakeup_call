@@ -1,11 +1,15 @@
 <h3> PagerDuty Wakeup Call</h3>
 <p> Status: {{#if triggered}} wake up {{else}} sleep {{/if}}</p>
 
+{{#if triggered}}
+  {{pdwc-alarm onStop=(action "reset") }}
+{{/if}}
+
 <div>
   <strong> Incidents </strong>
   <li>
     {{#each incidents as |incident|}}
-    <ul> incident </ul>
+    <ul> {{incident}} </ul>
     {{/each}}
   </li>
 </div>
