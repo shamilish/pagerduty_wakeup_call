@@ -1,5 +1,6 @@
 {
   "name": "ui",
   "dependencies": {
+    "howler": "~2.0.2"
   }
 }

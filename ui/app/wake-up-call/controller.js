@@ -6,7 +6,7 @@ const API_ENDPOINT = "http://localhost:4000/incidents";
 const POLL_INTERVAL = 1000;
 
 export default Controller.extend({
-  triggered: false,
+  triggered: true,
   incidents: null,
   requestService: Ember.inject.service('ajax'),
 
