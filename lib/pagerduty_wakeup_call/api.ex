@@ -2,6 +2,7 @@ defmodule PagerdutyWakeupCall.Api do
   alias PagerdutyWakeupCall.Incidents
   use Plug.Router
 
+  plug Plug.Logger
   plug :match
   plug CORSPlug
   plug :dispatch

@@ -4,53 +4,35 @@ defmodule PagerdutyWakeupCall.Incidents do
 
   @incident_subject "[PagerDuty ALERT]"
 
-  defstruct [:email, :refresh_interval, :incidents, :last_update]
+  defstruct [:email, :incidents, :last_update]
 
   def start_link do
     GenServer.start_link(__MODULE__, [], [name: __MODULE__])
   end
 
   def init([]) do
-    Logger.debug "#{__MODULE__} init"
+    Logger.info "#{__MODULE__} init"
     email = Application.get_env(:pagerduty_wakeup_call, :email)
-    refresh_interval = Application.get_env(:pagerduty_wakeup_call, :refresh_interval)
-    incidents = fetch_incidents(email)
-    state = %__MODULE__{email: email, refresh_interval: refresh_interval, incidents: incidents, last_update: Time.utc_now}
+    state = %__MODULE__{email: email, incidents: []}
 
-    periodic_refresher(refresh_interval)
     {:ok, state}
   end
 
   def get do
-    GenServer.call(__MODULE__, :get)
+    GenServer.call(__MODULE__, :get, 8000)
   end
 
-  def refresh do
-    GenServer.cast(__MODULE__, :refresh)
-  end
 
   # Server
 
   def handle_call(:get, _from, state) do
+    state = %{state | incidents: fetch_incidents(state.email)}
     {:reply, state.incidents, state}
-  end
-
-  def handle_cast(:refresh, state) do
-    state = %{state | incidents: fetch_incidents(state.email), last_update: Time.utc_now}
-    {:noreply, state}
   end
 
   def gmail_params do
     email = Application.get_env(:pagerduty_wakeup_call, :email)
     [email, refresh_token()]
-  end
-
-  def periodic_refresher(interval) do
-    Task.async(fn ->
-      :timer.sleep(interval * 1000)
-      refresh()
-      periodic_refresher(interval)
-    end)
   end
 
   defp fetch_incidents(email) do
